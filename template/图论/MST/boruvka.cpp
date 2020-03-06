@@ -1,3 +1,4 @@
+// https://www.luogu.com.cn/problem/P3366
 #include<bits/stdc++.h>
 using namespace std;
 struct nod{
