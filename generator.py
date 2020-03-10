@@ -38,7 +38,7 @@ def work(main_dir):
                 
                 if os.path.isfile(file_path):
                     file_split_name = os.path.splitext(file_name)
-                    if file_split_name[1] != ".cpp":
+                    if file_split_name[1] != ".cpp" and file_split_name[1] != ".md":
                         continue
                     
                     if DEBUG: print(file_name)

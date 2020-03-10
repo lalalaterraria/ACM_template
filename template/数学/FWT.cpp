@@ -1,3 +1,4 @@
+// https://www.luogu.com.cn/problem/P4717
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -26,6 +27,7 @@ void FWT_xor(int a[], int n, int on) {
 			for (int k = j; k < i + j; k++) {
 				int x = a[k], y = a[i + k];
 				Add(a[k], x, y); Sub(a[i + k], x, y);
+				// 这里注意Div2传入的mod如果是2，请特判
 				if (on == -1)Div2(a[k]), Div2(a[i + k]);
 			}
 }
