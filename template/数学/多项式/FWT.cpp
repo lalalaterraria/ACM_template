@@ -31,6 +31,12 @@ void FWT_xor(int a[], int n, int on) {
 				if (on == -1)Div2(a[k]), Div2(a[i + k]);
 			}
 }
+
+void FMT(int *p){
+    for(int i = 0;i < bit;i ++) for(int j = 0;j < len;j ++) 
+      { if( j & (1 << i) ) p[j] += p[j - (1 << i)]; }
+}
+
 int a[1 << 17], b[1 << 17], c[1 << 17];
 int main() {
 	ios::sync_with_stdio(0); cin.tie(0); int n; cin >> n;
