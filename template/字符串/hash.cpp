@@ -19,11 +19,11 @@ struct myhash{
             bas[i].nd=1ll*bas[i-1].nd*base.nd%mod.nd;
         }
     }
-    pii shift(pii x,int y){
+    pii pow(pii x,int y){
         return {1ll*x.st*bas[y].st%mod.st,1ll*x.nd*bas[y].nd%mod.nd};
     }
     pii str(int l,int r){
-        pii tmp=shift(has[l-1],r-l+1); 
+        pii tmp=pow(has[l-1],r-l+1); 
         return {(has[r].st-tmp.st+mod.st)%mod.st,(has[r].nd-tmp.nd+mod.nd)%mod.nd};
     }
 } H,H2;

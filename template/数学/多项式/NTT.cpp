@@ -4,10 +4,7 @@ using namespace std;
 
 #define ll long long
 #define maxn 2100000
-const int mod = 998244353;
-
-int rev[maxn];
-ll x[maxn], y[maxn];
+const ll mod = 998244353;
 
 ll mypow(ll a, ll b) {
 	ll ret = 1;
@@ -18,6 +15,7 @@ ll mypow(ll a, ll b) {
 	return ret;
 }
 
+int rev[maxn];
 void ntt(ll x[], int len, int on) {
 	for (int i = 0; i < len; i++)rev[i] = (i & 1)*(len >> 1) + (rev[i >> 1] >> 1);
 	for (int i = 0; i < len; i++)if (i < rev[i])swap(x[i], x[rev[i]]);
@@ -44,6 +42,7 @@ void ntt(ll x[], int len, int on) {
 }
 
 void work(ll x[], int m, ll y[], int n) {
+
 	//这里的x和y都包含常数项0次，m和n为最高次
 	int len = 1;
 	while (len <= m + n)len <<= 1;
@@ -56,6 +55,7 @@ void work(ll x[], int m, ll y[], int n) {
 	for (int i = 0; i <= m + n; i++) cout << x[i] << " "; cout << endl;
 }
 
+ll x[maxn], y[maxn];
 int main()
 {
 	ios::sync_with_stdio(0);
