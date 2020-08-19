@@ -41,27 +41,40 @@ void ntt(ll x[], int len, int on) {
 	}
 }
 
-void work(ll x[], int m, ll y[], int n) {
-
-	//这里的x和y都包含常数项0次，m和n为最高次
-	int len = 1;
-	while (len <= m + n)len <<= 1;
-
+void work(ll x[], ll y[], int len) {
 	ntt(x, len, 1); ntt(y, len, 1);
 	for (int i = 0; i < len; i++)x[i] = x[i] * y[i] % mod;
-	//解的时候注意下是否x,y都要解(复利用)
 	ntt(x, len, -1);
-
-	// for (int i = 0; i <= m + n; i++) cout << x[i] << " "; cout << endl;
 }
 
-ll x[maxn], y[maxn];
-int main()
-{
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	int n, m; cin >> n >> m;
-	for (int i = 0; i <= n; i++)cin >> x[i];
-	for (int i = 0; i <= m; i++)cin >> y[i];
-	work(x, m, y, n);
+// f(n) = h(x)+∑(i=1 to n)g(i)*f(n-i), f(0)=1
+// 那么开始讲f赋值为h即可
+ll f[maxn],g[maxn];
+ll a[maxn],b[maxn];
+void cdq(int l,int r,int len){
+	if(l==r) return;
+	int mid=l+r>>1;
+
+	//中序保证左半已经算完
+	cdq(l,mid,len>>1);
+
+	for(int i=0;i<len;i++)a[i]=i<len/2?f[l+i]:0,b[i]=g[i];
+	ntt(a,len,1);ntt(b,len,1);
+	for(int i=0;i<len;i++)a[i]=a[i]*b[i]%mod;
+	ntt(a,len,-1);
+	for(int i=mid+1;i<=r;i++)f[i]=(f[i]+a[i-l])%mod;
+
+	cdq(mid+1,r,len>>1);
+}
+
+int main(){
+	ios::sync_with_stdio(0);cin.tie(0);
+	int n;cin>>n;
+	for(int i=1;i<n;i++)cin>>g[i];
+	int len=1;while(len<n)len<<=1;
+
+	f[0]=1; // 非常关键
+	cdq(0,len-1,len);
+	
+	for(int i=0;i<n;i++)cout<<f[i]<<" ";cout<<endl;
 }

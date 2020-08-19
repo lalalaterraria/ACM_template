@@ -35,14 +35,14 @@ struct SeTree_sum{
         return ret;
     }
     void build(int rt,int l,int r,int a[]){
-    if(l==r){
-        t[rt]=a[l];
-        return;
+        if(l==r){
+            t[rt]=a[l];
+            return;
+        }
+        build(ls,l,mid,a);
+        build(rs,mid+1,r,a);
+        php(rt);
     }
-    build(ls,l,mid,a);
-    build(rs,mid+1,r,a);
-    php(rt);
-}
 } tr;
 
 int a[1000010];
