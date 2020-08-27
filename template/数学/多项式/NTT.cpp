@@ -1,5 +1,4 @@
-#include<iostream>
-#include<algorithm>
+#include<bits/stdc++.h>
 using namespace std;
 
 #define ll long long
@@ -44,8 +43,7 @@ void ntt(ll x[], int len, int on) {
 void work(ll x[], int m, ll y[], int n) {
 
 	//这里的x和y都包含常数项0次，m和n为最高次
-	int len = 1;
-	while (len <= m + n)len <<= 1;
+	int len = 1<<(32-__builtin_clz(n + m));
 
 	ntt(x, len, 1); ntt(y, len, 1);
 	for (int i = 0; i < len; i++)x[i] = x[i] * y[i] % mod;
@@ -56,8 +54,8 @@ void work(ll x[], int m, ll y[], int n) {
 }
 
 ll x[maxn], y[maxn];
-int main()
-{
+int main(){
+
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	int n, m; cin >> n >> m;
