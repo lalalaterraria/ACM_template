@@ -1,29 +1,52 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define st first
-#define nd second
-#define pii pair<int,int>
-pii base={131,137};
-pii mod={1e9+7,1e9+9};
+const int maxn=1000010;
+struct node {
+	int a,b; node(){}
+	node(int a,int b):a(a),b(b){}
+	friend ostream& operator <<(ostream& out,node x){ return out<<"("<<x.a<<","<<x.b<<")"; }  
+} base(131,137),Hmod(1e9+7,1e9+9);
+bool operator==(node x, node y) { return x.a==y.a&&x.b==y.b; }
+node operator*(node x, node y) { return node(1ll*x.a*y.a%Hmod.a,1ll*x.b*y.b%Hmod.b); }
+node operator+(node x, char c) { return node((x.a+c)%Hmod.a,(x.b+c)%Hmod.b); }
+node operator+(node x, node y) { return node((x.a+y.a)%Hmod.a,(x.b+y.b)%Hmod.b); }
+node operator-(node x, node y) { return node((x.a+Hmod.a-y.a)%Hmod.a,(x.b+Hmod.b-y.b)%Hmod.b); }
+struct mybase{
+	node bas[maxn];
+	mybase(){ 
+		bas[0]={1,1};
+		for(int i=1;i<maxn;i++) bas[i]=bas[i-1]*base;
+	}
+} B;
 struct myhash{
-    pii has[1000010];
-    pii bas[1000010];
-    // 注意字符串从1开始存
-    void init(char s[],int n){
-        has[0]={0,0};bas[0]={1,1};
-        for(int i=1;i<=n;i++){
-            has[i].st=(1ll*has[i-1].st*base.st+s[i])%mod.st;
-            has[i].nd=(1ll*has[i-1].nd*base.nd+s[i])%mod.nd;
-            bas[i].st=1ll*bas[i-1].st*base.st%mod.st;
-            bas[i].nd=1ll*bas[i-1].nd*base.nd%mod.nd;
-        }
+	vector<node> has;
+    // 注意哈希数组从1开始存，高位在左
+    myhash(string &s){
+		has.reserve(s.size()+1);
+		has.push_back({0,0});
+        for(int i=0;i<int(s.size());i++) has.push_back(has[i]*base+s[i]);
     }
-    pii pow(pii x,int y){
-        return {1ll*x.st*bas[y].st%mod.st,1ll*x.nd*bas[y].nd%mod.nd};
-    }
-    pii str(int l,int r){
-        pii tmp=pow(has[l-1],r-l+1); 
-        return {(has[r].st-tmp.st+mod.st)%mod.st,(has[r].nd-tmp.nd+mod.nd)%mod.nd};
-    }
-} H,H2;
+	node str(int l,int r){
+		return has[r]-has[l-1]*B.bas[r-l+1];
+	}
+};
+
+// s在t中出现次数
+int match(string &s,string &t){
+	int n=s.size(),m=t.size(),ret=0;
+	myhash h1(s),h2(t);
+	for(int i=1;i<=m-n+1;i++){
+		ret+=h1.str(1,n)==h2.str(i,n+i-1);
+	}
+	return ret;
+}
+
+int main(){
+	ios::sync_with_stdio(0);cin.tie(0);
+    int t;cin>>t;
+	while(t--){
+		string s,t;cin>>s>>t;
+		cout<<match(s,t)<<endl;
+	}
+}

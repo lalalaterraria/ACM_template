@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
-#define maxn 2100000
-const ll mod = 998244353;
+const int maxn = 2100000;
+const int mod = 998244353;
 
 ll mypow(ll a, ll b) {
 	ll ret = 1;
@@ -12,7 +12,6 @@ ll mypow(ll a, ll b) {
 	}
 	return ret;
 }
-
 int rev[maxn];
 void ntt(ll x[], int len, int on) {
 	for (int i = 0; i < len; i++)rev[i] = (i & 1)*(len >> 1) + (rev[i >> 1] >> 1);
@@ -39,23 +38,23 @@ void ntt(ll x[], int len, int on) {
 	}
 }
 
-ll c[maxn];
+ll a[maxn],b[maxn],c[maxn];
+
 void work(int now,ll a[],ll b[]) {
 	if(now==1) {b[0]=mypow(a[0],mod-2);return;}
-	work(now+1>>1,a,b); // now/2向上取整
-	int len=1<<(32-__builtin_clz(now));
+	work((now+1)>>1,a,b); // now/2向上取整
+	int len=1<<(32-__builtin_clz(now+now));
+	for(int i=0;i<len;i++) c[i]=i<now?a[i]:0;
 	
-	for(int i=0;i<len;++i) c[i]=i<now?a[i]:0;
-	ntt(b,len,1),ntt(c,len,1);
-	for(int i=0;i<len;++i)
-		b[i]=1LL*(2-1LL*c[i]*b[i]%mod+mod)%mod*b[i]%mod;
+    ntt(b,len,1),ntt(c,len,1);
+	for(int i=0;i<len;i++){
+		b[i]=(2+mod-c[i]*b[i]%mod)%mod*b[i]%mod;
+    }
 	ntt(b,len,-1);
-	for(int i=now;i<len;++i) b[i]=0;
+	for(int i=now;i<len;i++) b[i]=0;
 }
 
-ll a[maxn], b[maxn];
-int main(){
-
+signed main(){
 	ios::sync_with_stdio(0);cin.tie(0);
 	int n;cin>>n;
 	for(int i=0;i<n;++i) cin>>a[i];
